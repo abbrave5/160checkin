@@ -65,7 +65,7 @@
 <body>
   <div class="card">
     <h1>MUS 160 Coaching Check-In</h1>
-    <form method="POST" action="https://script.google.com/macros/s/AKfycbwFfhqeqThX16TDlsDTNfXM4Gw78qvP3RwXc7SEKHoFSFx4nzzoMQyWBiZaxl4POjhE/exec" id="checkinForm">
+    <form method="POST" action="https://script.google.com/macros/s/AKfycbzCI0Zomzw4FeNPo4jGAZ9wPbiXatF01whw8efPohjazvBUrpr4cBVa9VjYquEOIDr6/exec" id="checkinForm">
       <label for="name">Student Name</label>
       <input id="name" name="name" required autocomplete="name">
 
@@ -80,10 +80,33 @@
 const form = document.getElementById("checkinForm");
 const button = document.getElementById("submitBtn");
 
-form.addEventListener("submit", () => {
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
   button.textContent = "Submitting...";
   button.disabled = true;
-  )};
+
+  try {
+    await fetch(form.action, {
+      method: "POST",
+      body: new FormData(form)
+    });
+
+    button.textContent = "Checked In ✓";
+
+    setTimeout(() => {
+      form.reset();
+      button.textContent = "Check In";
+      button.disabled = false;
+      document.getElementById("name").focus();
+    }, 1500);
+
+  } catch (err) {
+    button.textContent = "Error - Try Again";
+    button.disabled = false;
+  }
+});
+</script>
 </script>
 </body>
 </html>
